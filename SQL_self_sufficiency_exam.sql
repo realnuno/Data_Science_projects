@@ -1,7 +1,8 @@
 1. Write a query that allows you to inspect the schema of the naep table.
 
-SELECT *
-FROM naep;
+SELECT column_name, data_type 
+FROM information_schema.columns
+WHERE table_name = 'naep';
 
 
 
@@ -38,23 +39,19 @@ LIMIT 10;
 
 6.
 
-SELECT state, ROUND(AVG(avg_math_4_score), 2) AS score_avg
+SELECT ROUND(AVG(avg_math_4_score), 2) AS avg_of_avg
 FROM naep
-WHERE year = 2000
-GROUP BY state
-ORDER BY state;
+WHERE year = 2000;
 
 
 7.
-
-SELECT state AS below_average_states_y2000, avg_math_4_score
+SELECT state AS below_average_states_y2000, avg_math_4_score, year
 FROM naep
 WHERE avg_math_4_score <
 	(SELECT AVG(avg_math_4_score)
 	 FROM naep
 	 WHERE year = 2000)
-	 AND year = 2000
-GROUP BY state, avg_math_4_score
+GROUP BY state, avg_math_4_score, year
 ORDER BY state;
 
 
